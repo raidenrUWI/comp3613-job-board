@@ -1,0 +1,67 @@
+{% extends "authenticated-base.html" %}
+{% block title %}My listings · HireBoard{% endblock %}
+
+{% block subpage_content %}
+<h1>My listings</h1>
+<p>New listings wait for admin approval before they appear to graduates.</p>
+
+<section class="mb-5" aria-labelledby="existing-listings-heading">
+  <h2 id="existing-listings-heading">Your listings</h2>
+  {% if listings %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>Title</th><th>Company</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for listing in listings %}
+        <tr>
+          <td>{{ listing.title }}</td>
+          <td>{{ listing.company }}</td>
+          <td>{{ listing.status|title }}</td>
+          <td><a href="/listings/{{ listing.id }}/applicants">View applicants</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>You have not submitted any listings yet.</p>
+  {% endif %}
+</section>
+
+<section aria-labelledby="submit-listing-heading">
+  <h2 id="submit-listing-heading">Submit new listing</h2>
+  <form action="/listings" method="post">
+    <div class="mb-3">
+      <label class="form-label" for="title">Job title</label>
+      <input class="form-control" id="title" name="title" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="company">Company</label>
+      <input class="form-control" id="company" name="company" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="apply_mode">Application method</label>
+      <select class="form-select" id="apply_mode" name="apply_mode" required>
+        <option value="collect">Apply on HireBoard</option>
+        <option value="external">Apply on another website</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="deadline">Application deadline</label>
+      <input class="form-control" id="deadline" name="deadline" type="date" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="external_url">External application URL</label>
+      <input class="form-control" id="external_url" name="external_url" type="url">
+      <div class="form-text">Required when the application method is external.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit listing for review</button>
+  </form>
+</section>
+{% endblock %}

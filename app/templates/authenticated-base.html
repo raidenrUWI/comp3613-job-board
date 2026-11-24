@@ -6,9 +6,16 @@
     <a class="brand-wordmark" href="{{ url_for('index_view') }}">HireBoard</a>
     <nav class="app-topnav" aria-label="App">
       <a class="{{ 'is-active' if request.url.path.startswith('/app') }}" href="{{ url_for('user_home_view') }}">Home</a>
+      {% if user.role == "graduate" %}
       <a class="{{ 'is-active' if request.url.path.startswith('/jobs') }}" href="{{ url_for('jobs_view') }}">Jobs</a>
+      <a class="{{ 'is-active' if request.url.path.startswith('/applications') }}" href="/applications">My applications</a>
+      {% elif user.role == "employer" %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/listings') }}" href="/listings">My listings</a>
+      {% elif user.role == "admin" %}
+      <a class="{{ 'is-active' if request.url.path.startswith('/admin') }}" href="{{ url_for('admin_home_view') }}">Admin</a>
+      {% endif %}
       <a href="{{ url_for('logout') }}">Sign out</a>
-      <span>{{ user.username }}</span>
+      <span>{{ user.username }} · {{ user.role }}</span>
     </nav>
   </header>
   <main class="app-main">

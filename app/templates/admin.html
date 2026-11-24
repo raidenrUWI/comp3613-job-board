@@ -3,10 +3,50 @@
 
 {% block subpage_content %}
 <h1>Admin</h1>
-<p>
-  Review pending listings and manage applicant packages.
-</p>
-<div class="app-actions">
-  <a class="secondary" href="/api/admin/listings/pending?actor_id={{ user.id }}">Pending listings</a>
-</div>
+<p>Review employer submissions before publishing them to graduates.</p>
+
+<section class="mb-5" aria-labelledby="pending-listings-heading">
+  <h2 id="pending-listings-heading">Pending listings</h2>
+  {% if pending_listings %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr><th>Title</th><th>Company</th><th>Description</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for listing in pending_listings %}
+        <tr>
+          <td>{{ listing.title }}</td>
+          <td>{{ listing.company }}</td>
+          <td>{{ listing.description }}</td>
+          <td>
+            <form action="/admin/listings/{{ listing.id }}/publish" method="post">
+              <button class="btn btn-primary" type="submit">Publish</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>No listings are waiting for review.</p>
+  {% endif %}
+</section>
+
+<section aria-labelledby="published-listings-heading">
+  <h2 id="published-listings-heading">Published listings</h2>
+  {% if published_listings %}
+  <ul>
+    {% for listing in published_listings %}
+    <li>
+      {{ listing.title }} at {{ listing.company }}
+      <a href="/admin/listings/{{ listing.id }}/export">Export applicants</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No current published listings.</p>
+  {% endif %}
+</section>
 {% endblock %}

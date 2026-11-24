@@ -1,0 +1,35 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Applicants · HireBoard{% endblock %}
+
+{% block subpage_content %}
+<h1>Applicants{% if listing %}: {{ listing.title }}{% endif %}</h1>
+{% if applicants %}
+<div class="job-list">
+  {% for applicant in applicants %}
+  <article class="job-card">
+    <h2>{{ applicant.graduate_name }}</h2>
+    <p><strong>Status:</strong> {{ applicant.status|title }}</p>
+    <p><strong>Cover letter</strong></p>
+    <p>{{ applicant.cover_letter }}</p>
+    <div class="d-flex flex-wrap gap-2">
+      {% for action, label in [
+        ("review", "Review"),
+        ("shortlist", "Shortlist"),
+        ("reject", "Reject"),
+        ("hire", "Hire"),
+        ("reopen", "Reopen")
+      ] %}
+      <form action="/applications/{{ applicant.id }}/transition" method="post">
+        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+        <button class="btn btn-outline-primary" type="submit" name="action" value="{{ action }}">{{ label }}</button>
+      </form>
+      {% endfor %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p>No applicants have applied to this listing yet.</p>
+{% endif %}
+<p class="mt-3"><a href="/listings">Back to my listings</a></p>
+{% endblock %}

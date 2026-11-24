@@ -5,6 +5,12 @@
 <h1>Available jobs</h1>
 <p>Browse current published openings.</p>
 
+{% if user.role == "graduate" %}
+<form action="/subscribe" method="post" class="mb-4">
+  <button class="btn btn-outline-primary" type="submit">Subscribe to job alerts</button>
+</form>
+{% endif %}
+
 {% if jobs %}
 <div class="job-list">
   {% for job in jobs %}
@@ -16,6 +22,19 @@
     <p>{{ job.description }}</p>
     <div class="job-card-footer">
       <span>Apply by {{ job.deadline }}</span>
+      {% if user.role == "graduate" %}
+      {% if job.apply_mode == "collect" %}
+      <form action="/jobs/{{ job.id }}/apply" method="post" class="mt-3">
+        <label class="form-label" for="cover-letter-{{ job.id }}">Cover letter</label>
+        <textarea class="form-control mb-2" id="cover-letter-{{ job.id }}" name="cover_letter" rows="4" required></textarea>
+        <button class="btn btn-primary" type="submit">Apply</button>
+      </form>
+      {% elif job.safe_external_url %}
+      <a class="btn btn-primary" href="{{ job.safe_external_url }}" target="_blank" rel="noopener noreferrer">Apply externally</a>
+      {% else %}
+      <span>Apply externally using the employer's instructions.</span>
+      {% endif %}
+      {% endif %}
     </div>
   </article>
   {% endfor %}

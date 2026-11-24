@@ -1,21 +1,28 @@
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi import status
-from app.dependencies.session import SessionDep
-from app.dependencies.auth import AdminDep, IsUserLoggedIn, get_current_user, is_admin
+
+from app.dependencies.auth import AuthDep
+from app.services.listings import list_jobs_for_graduates, list_pending_for_admin
+from app.utilities.flash import flash
+
 from . import router, templates
 
 
 @router.get("/admin", response_class=HTMLResponse)
 async def admin_home_view(
     request: Request,
-    user: AdminDep,
-    db:SessionDep
+    user: AuthDep,
 ):
+    if user.role != "admin":
+        flash(request, "Not allowed", "danger")
+        return RedirectResponse("/app", status_code=303)
+
     return templates.TemplateResponse(
-        request=request, 
+        request=request,
         name="admin.html",
         context={
-            "user": user
+            "user": user,
+            "pending_listings": list_pending_for_admin(),
+            "published_listings": list_jobs_for_graduates(),
         }
     )

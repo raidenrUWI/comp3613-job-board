@@ -4,9 +4,16 @@
 {% block subpage_content %}
 <h1>Board home</h1>
 <p>
-  Find current job openings and manage your HireBoard account.
+  Welcome, {{ user.username }}. Use the links below to continue.
 </p>
 <div class="app-actions">
+  {% if user.role == "graduate" %}
   <a href="{{ url_for('jobs_view') }}">Browse jobs</a>
+  <a class="secondary" href="/applications">My applications</a>
+  {% elif user.role == "employer" %}
+  <a href="/listings">Manage my listings</a>
+  {% elif user.role == "admin" %}
+  <a href="{{ url_for('admin_home_view') }}">Review listings</a>
+  {% endif %}
 </div>
 {% endblock %}

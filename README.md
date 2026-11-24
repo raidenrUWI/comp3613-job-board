@@ -16,7 +16,7 @@ python manage.py init
 python manage.py run
 ```
 
-Open http://127.0.0.1:5000 — SSR auth shell and job listings at `/jobs`; scenario JSON is under `/api`, with OpenAPI docs at `/docs` in development only.
+Open http://127.0.0.1:5000 — graduates browse `/jobs` and `/applications`, employers manage `/listings`, and admins review listings at `/admin`. Scenario JSON remains under `/api`, with OpenAPI docs at `/docs` in development only.
 
 ## Seeded API accounts
 

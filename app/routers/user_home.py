@@ -13,12 +13,22 @@ async def jobs_view(
     request: Request,
     user: AuthDep,
 ):
+    jobs = list_jobs_for_graduates()
+    for job in jobs:
+        external_url = job.get("external_url")
+        job["safe_external_url"] = (
+            external_url
+            if external_url
+            and external_url.lower().startswith(("http://", "https://"))
+            else None
+        )
+
     return templates.TemplateResponse(
         request=request,
         name="jobs.html",
         context={
             "user": user,
-            "jobs": list_jobs_for_graduates(),
+            "jobs": jobs,
         },
     )
 

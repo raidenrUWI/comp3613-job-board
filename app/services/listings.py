@@ -53,6 +53,16 @@ def list_jobs_for_graduates() -> list[dict[str, Any]]:
         return [r.model_dump() for r in rows if is_open_to_graduates(r)]
 
 
+def list_employer_listings(employer_id: int) -> list[dict[str, Any]]:
+    with Session(engine) as session:
+        rows = session.exec(
+            select(Listing)
+            .where(Listing.employer_id == employer_id)
+            .order_by(Listing.id)
+        ).all()
+        return [row.model_dump() for row in rows]
+
+
 def list_pending_for_admin() -> list[dict[str, Any]]:
     with Session(engine) as session:
         rows = session.exec(

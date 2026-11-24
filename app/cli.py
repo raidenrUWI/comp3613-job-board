@@ -76,6 +76,8 @@ def cmd_run(args: argparse.Namespace) -> None:
         host=bind_host,
         port=bind_port,
         reload=use_reload,
+        proxy_headers=True,
+        forwarded_allow_ips="*",
     )
 
 

@@ -24,6 +24,8 @@ from . import (
     logout,
     server_config,
     board,
+    board_web,
 )
 
 api_router.include_router(board.router)
+router.include_router(board_web.router)
