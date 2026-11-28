@@ -6,7 +6,7 @@ from fastapi import APIRouter, Form, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 
 from app.dependencies.auth import AuthDep
-from app.services import applications, board_auth, listings
+from app.services import applications, board_auth, listings, messages
 from app.utilities.flash import flash
 
 from . import templates
@@ -167,6 +167,82 @@ def employer_listing_applicants(
             "applicants": applicants_with_users,
         },
     )
+
+
+@router.get("/messages")
+def messages_inbox(request: Request, user: AuthDep):
+    result = messages.my_threads(user.id)
+    if not result.get("ok"):
+        flash(request, result.get("error", "Unable to load messages"), "danger")
+        return RedirectResponse("/app", status_code=303)
+    return templates.TemplateResponse(
+        request=request,
+        name="messages.html",
+        context={"user": user, "threads": result["threads"]},
+    )
+
+
+@router.get("/messages/application/{application_id}")
+def application_messages(application_id: int, request: Request, user: AuthDep):
+    result = messages.application_thread(user.id, application_id)
+    if not result.get("ok"):
+        flash(request, result.get("error", "Unable to open conversation"), "danger")
+        return RedirectResponse("/app", status_code=303)
+    return templates.TemplateResponse(
+        request=request,
+        name="message_thread.html",
+        context={
+            "user": user,
+            "thread": result["thread"],
+            "messages": result["messages"],
+            "listing": result["listing"],
+            "other_party_name": result["other_party_name"],
+        },
+    )
+
+
+@router.get("/messages/listing/{listing_id}")
+def listing_messages(listing_id: int, request: Request, user: AuthDep):
+    result = messages.listing_thread(user.id, listing_id)
+    if not result.get("ok"):
+        flash(request, result.get("error", "Unable to open conversation"), "danger")
+        return RedirectResponse("/app", status_code=303)
+    return templates.TemplateResponse(
+        request=request,
+        name="message_thread.html",
+        context={
+            "user": user,
+            "thread": result["thread"],
+            "messages": result["messages"],
+            "listing": result["listing"],
+            "other_party_name": result["other_party_name"],
+        },
+    )
+
+
+@router.post("/messages/{thread_id}")
+def post_message(
+    thread_id: int,
+    request: Request,
+    user: AuthDep,
+    body: str = Form(),
+):
+    result = messages.send_message(user.id, thread_id, body)
+    if result.get("ok"):
+        flash(request, "Message sent.")
+    else:
+        flash(request, result.get("error", "Unable to send message"), "danger")
+    thread = result.get("thread")
+    if thread is None:
+        return RedirectResponse("/app", status_code=303)
+    if not result.get("ok") and result.get("code") == "forbidden":
+        return RedirectResponse("/app", status_code=303)
+    path = (
+        f"application/{thread['application_id']}"
+        if thread["kind"] == "application"
+        else f"listing/{thread['listing_id']}"
+    )
+    return RedirectResponse(path, status_code=303)
 
 
 @router.post("/applications/{application_id}/transition")

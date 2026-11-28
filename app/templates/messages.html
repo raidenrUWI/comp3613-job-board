@@ -1,0 +1,28 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Messages · HireBoard{% endblock %}
+
+{% block subpage_content %}
+<h1>Messages</h1>
+{% if threads %}
+<div class="job-list">
+  {% for thread in threads %}
+  <article class="job-card">
+    <h2>
+      <a href="{% if thread.kind == 'application' %}/messages/application/{{ thread.application_id }}{% else %}/messages/listing/{{ thread.listing_id }}{% endif %}">
+        {{ thread.title }}
+      </a>
+    </h2>
+    <p><strong>With:</strong> {{ thread.other_party_name }}</p>
+    {% if thread.last_message %}
+    <p>{{ thread.last_message.username }} · {{ thread.last_message.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+    <p>{{ thread.last_message.body }}</p>
+    {% else %}
+    <p>No messages yet.</p>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p>No conversations yet.</p>
+{% endif %}
+{% endblock %}
