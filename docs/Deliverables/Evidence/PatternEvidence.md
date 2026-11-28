@@ -113,7 +113,7 @@ The code follows the diagram's design, with these implementation differences:
 | `ApplicationRepository` | Direct `Session` queries in the service | No repository layer exists for applications in the starter |
 
 The class diagram has been updated to match these names (S2-#12, PR #23 and PR #26):
-[plantuml-diagramSprint2.png](../diagrams/ClassDiagram/plantuml-diagramSprint2.png)
+[ClassDiagram_Sprint2.png](../diagrams/ClassDiagram/ClassDiagram_Sprint2.png)
 ([source](../diagrams/ClassDiagram/class-diagram_Sprint2.puml)). The Sprint 1 version is kept as
 [ClassDiagram_Sprint1.png](../diagrams/ClassDiagram/ClassDiagram_Sprint1.png) for comparison.
 The pattern itself (five states, the legal transitions, `IllegalTransition`, one stored `status`)
