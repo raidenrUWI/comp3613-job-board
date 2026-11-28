@@ -11,6 +11,7 @@
     <p><strong>Status:</strong> {{ applicant.status|title }}</p>
     <p><strong>Cover letter</strong></p>
     <p>{{ applicant.cover_letter }}</p>
+    <p><a href="/messages/application/{{ applicant.id }}">Message</a></p>
     <div class="d-flex flex-wrap gap-2">
       {% for action, label in [
         ("review", "Review"),

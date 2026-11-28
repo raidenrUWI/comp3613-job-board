@@ -23,6 +23,7 @@
             <form action="/admin/listings/{{ listing.id }}/publish" method="post">
               <button class="btn btn-primary" type="submit">Publish</button>
             </form>
+            <a href="/messages/listing/{{ listing.id }}">Message employer</a>
           </td>
         </tr>
         {% endfor %}
@@ -42,6 +43,7 @@
     <li>
       {{ listing.title }} at {{ listing.company }}
       <a href="/admin/listings/{{ listing.id }}/export">Export applicants</a>
+      <a href="/messages/listing/{{ listing.id }}">Message employer</a>
     </li>
     {% endfor %}
   </ul>

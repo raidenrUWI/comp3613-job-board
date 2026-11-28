@@ -19,7 +19,10 @@
           <td>{{ listing.title }}</td>
           <td>{{ listing.company }}</td>
           <td>{{ listing.status|title }}</td>
-          <td><a href="/listings/{{ listing.id }}/applicants">View applicants</a></td>
+          <td>
+            <a href="/listings/{{ listing.id }}/applicants">View applicants</a>
+            <a class="ms-2" href="/messages/listing/{{ listing.id }}">Message admin</a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
