@@ -8,7 +8,7 @@
 |---|---|---|
 | Cristian Rampersad | `[816044517]` | `cris24TT` |
 | Raiden Ramdath | `[816044899]` | `raidenrUWI]` |
-| Jelani Franics | `[816044626]` | `Jelanidprogram` |
+| Jelani Francis | `[816044626]` | `Jelanidprogram` |
 
 ## Links
 
